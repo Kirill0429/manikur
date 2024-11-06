@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запись на маникюр</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Запись на маникюр</h1>
+
+        <!-- Форма записи для клиентов -->
+        <div id="booking-form">
+            <h2>Записаться на маникюр</h2>
+            <input type="text" id="userName" placeholder="Ваше имя">
+            <input type="text" id="userPhone" placeholder="Номер телефона">
+            <select id="timeSlot">
+                <option value="">Выберите время</option>
+                <option value="10:00">10:00</option>
+                <option value="12:00">12:00</option>
+                <option value="14:00">14:00</option>
+                <option value="16:00">16:00</option>
+                <option value="18:00">18:00</option>
+                <option value="20:00">20:00</option>
+            </select>
+            <button onclick="bookAppointment()">Записаться</button>
+            <button onclick="contactAdmin()">Связаться с администратором</button>
+        </div>
+
+        <!-- Сообщения для связи с администратором -->
+        <div id="contact-form" class="hidden">
+            <h2>Сообщение администратору</h2>
+            <textarea id="userMessage" placeholder="Ваше сообщение"></textarea>
+            <button onclick="sendMessage()">Отправить</button>
+            <button onclick="hideContactForm()">Отмена</button>
+        </div>
+
+        <!-- Форма входа для админа и владельца -->
+        <div id="admin-login-form" class="hidden">
+            <h2>Вход администратора / владельца</h2>
+            <input type="text" id="adminLogin" placeholder="Логин">
+            <input type="password" id="adminPassword" placeholder="Пароль">
+            <button onclick="loginUser()">Войти</button>
+        </div>
+
+        <!-- Панель администратора -->
+        <div id="admin-panel" class="hidden">
+            <h2>Панель администратора</h2>
+            <p>Добро пожаловать, <span id="admin-name">Кирилл</span>!</p>
+            <ul id="admin-appointments"></ul>
+            <h3>Сообщения от клиентов</h3>
+            <ul id="admin-messages"></ul>
+            <button onclick="logoutUser()">Выйти</button>
+        </div>
+
+        <!-- Панель владельца -->
+        <div id="owner-panel" class="hidden">
+            <h2>Панель владельца</h2>
+            <p>Добро пожаловать, <span id="owner-name">Ирина</span>!</p>
+            <ul id="owner-appointments"></ul>
+            <h3>Сообщения от клиентов</h3>
+            <ul id="owner-messages"></ul>
+            <button onclick="logoutUser()">Выйти</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
