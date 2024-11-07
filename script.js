@@ -5,18 +5,72 @@ let currentUser = null;
 function bookAppointment() {
     const userName = document.getElementById('userName').value;
     const userPhone = document.getElementById('userPhone').value;
-    const timeSlot = document.getElementById('timeSlot').value;
+    const service = document.getElementById('service').value;
+    const timeSlot = document.getElementById('userTime').value;
 
-    if (userName && userPhone && timeSlot) {
-        appointments.push({ user: userName, phone: userPhone, time: timeSlot });
-        alert(`Запись успешна: ${userName} на ${timeSlot}`);
-        document.getElementById('userName').value = '';
-        document.getElementById('userPhone').value = '';
-        document.getElementById('timeSlot').value = '';
-        updateUI();
-    } else {
+    // Проверка, что все поля заполнены
+    if (!userName || !userPhone || !service || !timeSlot) {
         alert("Пожалуйста, заполните все поля.");
+        return;
     }
+
+    // Проверка корректности формата времени
+    const timePattern = /^([0-9]{2}):([0-9]{2})$/;
+    if (!timePattern.test(timeSlot)) {
+        alert("Введите время в формате чч:мм.");
+        return;
+    }
+
+    // Определяем длительность услуги
+    let duration;
+    if (service === 'manicure') {
+        duration = 3 * 60; // Маникюр - 3 часа
+    } else if (service === 'pedicure') {
+        duration = 2.5 * 60; // Педикюр - 2.5 часа
+    } else if (service === 'both') {
+        duration = 5.5 * 60; // Маникюр и педикюр - 5.5 часов
+    }
+
+    const startTime = new Date(`1970-01-01T${timeSlot}:00`);
+    const endTime = new Date(startTime.getTime() + duration * 60000);
+
+    // Проверка на занятость времени
+    const isTimeAvailable = appointments.every(app => {
+        const appStartTime = new Date(`1970-01-01T${app.time}:00`);
+        const appEndTime = new Date(appStartTime.getTime() + app.duration * 60000);
+
+        return endTime <= appStartTime || startTime >= appEndTime;
+    });
+
+    if (!isTimeAvailable) {
+        // Найти ближайшее доступное время
+        let closestTime = new Date(endTime);
+        let conflict = true;
+
+        while (conflict) {
+            conflict = appointments.some(app => {
+                const appStartTime = new Date(`1970-01-01T${app.time}:00`);
+                const appEndTime = new Date(appStartTime.getTime() + app.duration * 60000);
+                return closestTime >= appStartTime && closestTime < appEndTime;
+            });
+
+            if (conflict) closestTime = new Date(closestTime.getTime() + 15 * 60000); // Добавляем 15 минут
+        }
+
+        alert(`В выбранное время процедура уже запланирована. Ближайшее доступное окно: ${closestTime.toTimeString().slice(0, 5)}`);
+        return;
+    }
+
+    // Если время доступно, добавляем запись
+    appointments.push({ user: userName, phone: userPhone, service: service, time: timeSlot, duration });
+    alert(`Запись успешна: ${userName} на ${service} в ${timeSlot}`);
+
+    // Очистка полей формы
+    document.getElementById('userName').value = '';
+    document.getElementById('userPhone').value = '';
+    document.getElementById('service').value = '';
+    document.getElementById('userTime').value = '';
+    updateUI();
 }
 
 function contactAdmin() {
@@ -28,16 +82,26 @@ function hideContactForm() {
 }
 
 function sendMessage() {
-    const messageText = document.getElementById('userMessage').value;
-    if (messageText) {
-        messages.push({ from: 'Клиент', text: messageText });
-        alert("Сообщение отправлено администратору.");
-        document.getElementById('userMessage').value = '';
-        hideContactForm();
-        updateUI();
-    } else {
-        alert("Введите сообщение.");
+    const contactName = document.getElementById('contactName').value;
+    const contactPhone = document.getElementById('contactPhone').value;
+    const contactMessage = document.getElementById('contactMessage').value;
+
+    // Проверка, что имя, телефон и сообщение заполнены
+    if (!contactName || !contactPhone || !contactMessage) {
+        alert("Введите ваше имя, номер телефона и сообщение.");
+        return;
     }
+
+    // Добавление сообщения
+    messages.push({ from: contactName, phone: contactPhone, text: contactMessage });
+    alert("Сообщение отправлено администратору.");
+
+    // Очистка полей формы
+    document.getElementById('contactName').value = '';
+    document.getElementById('contactPhone').value = '';
+    document.getElementById('contactMessage').value = '';
+    hideContactForm();
+    updateUI();
 }
 
 function loginUser() {
@@ -100,7 +164,7 @@ function displayAppointments(panelId) {
     if (appointments.length > 0) {
         appointments.forEach(appointment => {
             const li = document.createElement('li');
-            li.innerText = `${appointment.user} (${appointment.phone}): ${appointment.time}`;
+            li.innerText = `${appointment.user} (${appointment.phone}): ${appointment.service} в ${appointment.time}`;
             appointmentsList.appendChild(li);
         });
     } else {
@@ -115,7 +179,7 @@ function displayMessages(panelId) {
     if (messages.length > 0) {
         messages.forEach(message => {
             const li = document.createElement('li');
-            li.innerText = `${message.from}: ${message.text}`;
+            li.innerText = `${message.from} (Телефон: ${message.phone}): ${message.text}`;
             messagesList.appendChild(li);
         });
     } else {
