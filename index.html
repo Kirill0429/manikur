@@ -3,56 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Меню администрирования</title>
+    <title>Система записи на маникюр</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Начальный экран -->
-        <div id="startScreen">
-            <button onclick="showLogin()">Войти</button>
-            <button onclick="showRegister()">Зарегистрироваться</button>
-        </div>
+    <!-- Главный экран -->
+    <div id="mainScreen">
+        <button onclick="showLogin()">Войти</button>
+        <button onclick="showRegistration()">Зарегистрироваться</button>
+    </div>
 
-        <!-- Форма входа -->
-        <div id="loginForm" class="form hidden">
-            <h2>Вход</h2>
-            <label for="login">Логин:</label>
-            <input type="text" id="login" placeholder="Введите логин" />
-            <label for="password">Пароль:</label>
-            <input type="password" id="password" placeholder="Введите пароль" />
-            <button onclick="login()">Войти</button>
-            <button onclick="goBack()">Назад</button>
-        </div>
+    <!-- Форма входа -->
+    <div id="loginForm" class="hidden">
+        <h2>Войти</h2>
+        <label for="login">Логин</label>
+        <input type="text" id="login" placeholder="Введите логин">
+        <label for="password">Пароль</label>
+        <input type="password" id="password" placeholder="Введите пароль">
+        <button onclick="login()">Войти</button>
+        <button onclick="backToMain()">Назад</button>
+    </div>
 
-        <!-- Форма регистрации -->
-        <div id="registerForm" class="form hidden">
-            <h2>Регистрация</h2>
-            <label for="name">Имя:</label>
-            <input type="text" id="name" placeholder="Введите имя" />
-            <label for="phone">Телефон:</label>
-            <input type="text" id="phone" placeholder="Введите номер телефона" />
-            <label for="regLogin">Логин:</label>
-            <input type="text" id="regLogin" placeholder="Введите логин" />
-            <label for="regPassword">Пароль:</label>
-            <input type="password" id="regPassword" placeholder="Введите пароль" />
-            <button onclick="register()">Зарегистрироваться</button>
-            <button onclick="goBack()">Назад</button>
-        </div>
+    <!-- Форма регистрации -->
+    <div id="registrationForm" class="hidden">
+        <h2>Регистрация</h2>
+        <label for="regName">Имя</label>
+        <input type="text" id="regName" placeholder="Введите имя">
+        <label for="regPhone">Телефон</label>
+        <input type="tel" id="regPhone" placeholder="Введите номер телефона">
+        <label for="regEmail">Электронная почта</label>
+        <input type="email" id="regEmail" placeholder="Введите электронную почту">
+        <label for="regPassword">Пароль</label>
+        <input type="password" id="regPassword" placeholder="Введите пароль">
+        <button onclick="register()">Зарегистрироваться</button>
+        <button onclick="backToMain()">Назад</button>
+    </div>
 
-        <!-- Панель SysAdmin -->
-        <div id="adminPanel" class="form hidden">
-            <h2>Панель Системного Администратора</h2>
-            <div id="appointmentList">
-                <h3>Записи клиентов</h3>
-                <!-- Список записей -->
-            </div>
-            <div id="messages">
-                <h3>Сообщения от клиентов</h3>
-                <!-- Список сообщений -->
-            </div>
-            <button onclick="goBack()">Выйти</button>
-        </div>
+    <!-- Панель пользователя -->
+    <div id="userPanel" class="hidden">
+        <h2>Ваши записи</h2>
+        <div id="appointmentsList"></div>
+        <button onclick="addAppointment()">Добавить запись</button>
+        <button onclick="editAppointment()">Редактировать запись</button>
+        <button onclick="deleteAppointment()">Удалить запись</button>
+        <button onclick="backToMain()">Назад</button>
+    </div>
+
+    <!-- Панель администратора -->
+    <div id="adminPanel" class="hidden">
+        <h2>Панель администратора</h2>
+        <h3>Список уведомлений</h3>
+        <div id="notificationsList"></div>
+        <h3>Список записей клиентов</h3>
+        <div id="appointmentsAdminList"></div>
+        <button onclick="backToMain()">Назад</button>
     </div>
 
     <script src="script.js"></script>
