@@ -3,91 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Запись на маникюр</title>
+    <title>Меню администрирования</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Убираем стрелки у полей ввода времени */
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        input[type="number"] {
-            -moz-appearance: textfield; /* Для Firefox */
-        }
-
-        /* Немного увеличиваем отступ между полями для времени */
-        #userHour, #userMinute {
-            width: 60px;
-            margin-right: 0%;
-        }
-        
-        span {
-            font-size: 2em;
-        }
-    </style>
 </head>
 <body>
-    <div id="app">
-        <h1>Запись на маникюр</h1>
+    <div class="container">
+        <!-- Начальный экран -->
+        <div id="startScreen">
+            <button onclick="showLogin()">Войти</button>
+            <button onclick="showRegister()">Зарегистрироваться</button>
+        </div>
 
-        <!-- Форма записи для клиентов -->
-        <div id="booking-form">
-            <h2>Записаться на маникюр</h2>
-            <input type="text" id="userName" placeholder="Ваше имя">
-            <input type="text" id="userPhone" placeholder="Номер телефона">
-            <select id="service">
-                <option value="">Выберите услугу</option>
-                <option value="manicure">Маникюр</option>
-                <option value="pedicure">Педикюр</option>
-                <option value="both">Маникюр и педикюр</option>
-            </select>
-            <div>
-                <input type="number" id="userHour" placeholder="Часы" min="0" max="23">
-                <span>:</span>
-                <input type="number" id="userMinute" placeholder="Минуты" min="0" max="59">
+        <!-- Форма входа -->
+        <div id="loginForm" class="form hidden">
+            <h2>Вход</h2>
+            <label for="login">Логин:</label>
+            <input type="text" id="login" placeholder="Введите логин" />
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" placeholder="Введите пароль" />
+            <button onclick="login()">Войти</button>
+            <button onclick="goBack()">Назад</button>
+        </div>
+
+        <!-- Форма регистрации -->
+        <div id="registerForm" class="form hidden">
+            <h2>Регистрация</h2>
+            <label for="name">Имя:</label>
+            <input type="text" id="name" placeholder="Введите имя" />
+            <label for="phone">Телефон:</label>
+            <input type="text" id="phone" placeholder="Введите номер телефона" />
+            <label for="regLogin">Логин:</label>
+            <input type="text" id="regLogin" placeholder="Введите логин" />
+            <label for="regPassword">Пароль:</label>
+            <input type="password" id="regPassword" placeholder="Введите пароль" />
+            <button onclick="register()">Зарегистрироваться</button>
+            <button onclick="goBack()">Назад</button>
+        </div>
+
+        <!-- Панель SysAdmin -->
+        <div id="adminPanel" class="form hidden">
+            <h2>Панель Системного Администратора</h2>
+            <div id="appointmentList">
+                <h3>Записи клиентов</h3>
+                <!-- Список записей -->
             </div>
-            <button onclick="bookAppointment()">Записаться</button>
-            <button onclick="contactAdmin()">Связаться с администратором</button>
-        </div>
-
-        <!-- Сообщения для связи с администратором -->
-        <div id="contact-form" class="hidden">
-            <h2>Сообщение администратору</h2>
-            <input type="text" id="contactName" placeholder="Ваше имя">
-            <input type="text" id="contactPhone" placeholder="Номер телефона">
-            <textarea id="contactMessage" placeholder="Ваше сообщение"></textarea>
-            <button onclick="sendMessage()">Отправить</button>
-            <button onclick="hideContactForm()">Отмена</button>
-        </div>
-
-        <!-- Форма входа для админа и владельца -->
-        <div id="admin-login-form" class="hidden">
-            <h2>Вход администратора / владельца</h2>
-            <input type="text" id="adminLogin" placeholder="Логин">
-            <input type="password" id="adminPassword" placeholder="Пароль">
-            <button onclick="loginUser()">Войти</button>
-        </div>
-
-        <!-- Панель администратора -->
-        <div id="admin-panel" class="hidden">
-            <h2>Панель администратора</h2>
-            <p>Добро пожаловать, <span id="admin-name">Кирилл</span>!</p>
-            <ul id="admin-appointments"></ul>
-            <h3>Сообщения от клиентов</h3>
-            <ul id="admin-messages"></ul>
-            <button onclick="logoutUser()">Выйти</button>
-        </div>
-
-        <!-- Панель владельца -->
-        <div id="owner-panel" class="hidden">
-            <h2>Панель владельца</h2>
-            <p>Добро пожаловать, <span id="owner-name">Ирина</span>!</p>
-            <ul id="owner-appointments"></ul>
-            <h3>Сообщения от клиентов</h3>
-            <ul id="owner-messages"></ul>
-            <button onclick="logoutUser()">Выйти</button>
+            <div id="messages">
+                <h3>Сообщения от клиентов</h3>
+                <!-- Список сообщений -->
+            </div>
+            <button onclick="goBack()">Выйти</button>
         </div>
     </div>
 
